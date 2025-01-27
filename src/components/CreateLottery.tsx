@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { LotteryConfig } from '../types/lottery';
 
 // 创建抽奖组件的属性接口
@@ -8,21 +9,20 @@ interface Props {
 
 export const CreateLottery: React.FC<Props> = ({ onSubmit }) => {
   // 状态管理
-  const [totalCoins, setTotalCoins] = useState(0);         // 总洋葱币数量
-  const [participantNames, setParticipantNames] = useState(''); // 参与者名单
-  const [drawTime, setDrawTime] = useState('');            // 开奖时间
+  const [totalCoins, setTotalCoins] = useState('');
+  const [participants, setParticipants] = useState('');
+  const [drawTime, setDrawTime] = useState('');
 
   // 表单提交处理
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 将参与者名单字符串转换为数组，并过滤空行
-    const participants = participantNames.split('\n').filter(name => name.trim());
     
-    // 提交抽奖配置
+    const participantList = participants.split(',').map(p => p.trim());
+    
     onSubmit({
-      totalCoins,
-      participantsCount: participants.length,
-      participants,
+      totalCoins: Number(totalCoins),
+      participantsCount: participantList.length,
+      participants: participantList,
       drawTime: new Date(drawTime)
     });
   };
@@ -32,22 +32,24 @@ export const CreateLottery: React.FC<Props> = ({ onSubmit }) => {
       {/* 总光年币数量输入 */}
       <div>
         <label>总光年币数量：</label>
-        <input 
-          type="number" 
-          value={totalCoins} 
-          onChange={e => setTotalCoins(Number(e.target.value))}
-          min="1"
+        <input
+          type="number"
+          value={totalCoins}
+          onChange={e => setTotalCoins(e.target.value)}
           required
+          min="1"
         />
       </div>
       
       {/* 参与者名单输入 */}
       <div>
-        <label>参与者名单（每行一个名字）：</label>
-        <textarea
-          value={participantNames}
-          onChange={e => setParticipantNames(e.target.value)}
+        <label>参与者名单（用逗号分隔）：</label>
+        <input
+          type="text"
+          value={participants}
+          onChange={e => setParticipants(e.target.value)}
           required
+          placeholder="张三,李四,王五"
         />
       </div>
       
