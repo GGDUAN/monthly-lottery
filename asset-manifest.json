@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/monthly-lottery/static/css/main.380079f5.css",
+    "main.js": "/monthly-lottery/static/js/main.1f28cefe.js",
+    "index.html": "/monthly-lottery/index.html",
+    "main.380079f5.css.map": "/monthly-lottery/static/css/main.380079f5.css.map",
+    "main.1f28cefe.js.map": "/monthly-lottery/static/js/main.1f28cefe.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.380079f5.css",
+    "static/js/main.1f28cefe.js"
+  ]
+}
