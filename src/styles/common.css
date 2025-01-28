@@ -1,0 +1,98 @@
+/* 通用变量 */
+:root {
+  --primary-color: #1890ff;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --border-radius: 8px;
+  --spacing: 16px;
+}
+
+/* 响应式容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 响应式表单 */
+.form-group {
+  margin-bottom: var(--spacing);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+}
+
+/* 响应式按钮 */
+.button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: #40a9ff;  /* 统一使用这个蓝色 */
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #69c0ff;
+}
+
+/* 响应式表格 */
+.results-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.results-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 媒体查询 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+
+  .button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .form-control {
+    font-size: 16px;
+  }
+
+  .results-table {
+    font-size: 12px;
+  }
+} 
