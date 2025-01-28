@@ -1,6 +1,6 @@
 // 抽奖配置接口
 export interface LotteryConfig {
-  totalCoins: number;      // 总光年币数量
+  totalCoins: number;      // 总洋葱币数量
   participantsCount: number; // 参与人数
   participants: string[];   // 参与者名单
   drawTime: Date;          // 开奖时间
@@ -9,9 +9,8 @@ export interface LotteryConfig {
 // 抽奖结果接口
 export interface LotteryResult {
   participantName: string;  // 参与者名字
-  coins: number;           // 获得的光年币数量
+  coins: number;           // 获得的洋葱币数量
   drawTime: Date;          // 抽奖时间
-  isManual: boolean;        // 是否手动参与
 }
 
 // 抽奖状态接口

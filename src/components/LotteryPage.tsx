@@ -21,35 +21,18 @@ export const LotteryPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [state.config.drawTime, state.isCompleted, state.results.length, state.config.participants.length, completeLottery]);
 
-  const handleNewLottery = () => {
-    localStorage.clear();
-    window.location.reload();
-  };
-
   return (
     <div>
-      {state.config.totalCoins === 0 ? (
+      {!state.config.totalCoins ? (
         <CreateLottery onSubmit={createLottery} />
-      ) : state.isCompleted ? (
-        <div>
-          <LotteryResults lotteryState={state} />
-          <button 
-            onClick={handleNewLottery}
-            className="new-lottery-button"
-          >
-            新建抽奖
-          </button>
-        </div>
       ) : (
-        <div>
-          <JoinLottery 
+        <>
+          {!state.isCompleted && <JoinLottery 
             lotteryState={state} 
             onParticipate={participate} 
-          />
-          {state.results.length > 0 && (
-            <LotteryResults lotteryState={state} />
-          )}
-        </div>
+          />}
+          <LotteryResults lotteryState={state} />
+        </>
       )}
     </div>
   );
