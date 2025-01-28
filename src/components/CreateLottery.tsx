@@ -5,7 +5,7 @@ import './CreateLottery.css';
 
 // 创建抽奖组件的属性接口
 interface Props {
-  onSubmit: (config: LotteryConfig) => void; // 提交抽奖配置的回调函数
+  onSubmit: (config: LotteryConfig) => Promise<string>;
 }
 
 export const CreateLottery: React.FC<Props> = ({ onSubmit }) => {
@@ -13,66 +13,76 @@ export const CreateLottery: React.FC<Props> = ({ onSubmit }) => {
   const [totalCoins, setTotalCoins] = useState('');
   const [participants, setParticipants] = useState('');
   const [drawTime, setDrawTime] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleClear = () => {
-    localStorage.clear();
-    window.location.reload();
-  };
-
-  // 表单提交处理
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError(null);
+
+    // 验证输入
     const participantList = participants
-      .split(/[,，\n]/) // 支持逗号、中文逗号和换行分隔
-      .map(name => name.trim())
-      .filter(name => name); // 过滤空值
-    
+      .split(/[,，\n]/) // 支持英文逗号、中文逗号和换行
+      .map(p => p.trim())
+      .filter(Boolean); // 过滤空值
+
     if (participantList.length < 2) {
-      alert('请至少输入两个参与者');
+      setError('至少需要两名参与者');
       return;
     }
 
-    if (Number(totalCoins) < participantList.length) {
-      alert('光年币数量必须大于等于参与人数');
+    const coins = parseInt(totalCoins);
+    if (isNaN(coins) || coins < participantList.length) {
+      setError('光年币数量必须大于参与人数');
       return;
     }
 
-    onSubmit({
-      totalCoins: Number(totalCoins),
-      participantsCount: participantList.length,
-      participants: participantList,
-      drawTime: new Date(drawTime)
-    });
+    const drawDate = new Date(drawTime);
+    if (isNaN(drawDate.getTime()) || drawDate <= new Date()) {
+      setError('请选择一个有效的未来时间');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const config: LotteryConfig = {
+        totalCoins: coins,
+        participantsCount: participantList.length,
+        participants: participantList,
+        drawTime: drawDate
+      };
+      
+      await onSubmit(config);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '创建抽奖失败');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="container create-lottery">
       <h2>创建抽奖</h2>
-      <button 
-        type="button" 
-        onClick={handleClear}
-        className="clear-cache-button"
-      >
-        清除缓存
-      </button>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>总光年币</label>
+          <label>总光年币数量</label>
           <input
             type="number"
             className="form-control"
             value={totalCoins}
             onChange={(e) => setTotalCoins(e.target.value)}
+            min="1"
             required
           />
         </div>
         <div className="form-group">
-          <label>参与者名单（用逗号分隔）</label>
+          <label>参与者名单（用逗号或换行分隔）</label>
           <textarea
             className="form-control"
             value={participants}
             onChange={(e) => setParticipants(e.target.value)}
+            placeholder=""
             required
           />
         </div>
@@ -87,7 +97,13 @@ export const CreateLottery: React.FC<Props> = ({ onSubmit }) => {
           />
         </div>
         <div className="button-container">
-          <button type="submit" className="button">创建抽奖</button>
+          <button 
+            type="submit" 
+            className="button"
+            disabled={submitting}
+          >
+            {submitting ? '创建中...' : '创建抽奖'}
+          </button>
         </div>
       </form>
     </div>

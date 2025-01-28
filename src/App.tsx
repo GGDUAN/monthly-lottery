@@ -1,12 +1,16 @@
-import * as React from 'react';
-import { LotteryProvider } from './context/LotteryContext';
+import React from 'react';
 import { LotteryPage } from './components/LotteryPage';
+import { LotteryProvider } from './context/LotteryFirebaseContext';
 import './styles/lottery.css';
 
-export default function App() {
+function App() {
   return (
     <LotteryProvider>
-      <LotteryPage />
+      <div className="App">
+        <LotteryPage />
+      </div>
     </LotteryProvider>
   );
-} 
+}
+
+export default App; 

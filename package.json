@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://ggduan.github.io/monthly-lottery",
   "dependencies": {
+    "firebase": "^11.2.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
