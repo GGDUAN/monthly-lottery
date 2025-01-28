@@ -3,17 +3,37 @@
   border-radius: var(--border-radius);
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;  /* 限制最大宽度 */
+  margin: 0 auto;    /* 容器水平居中 */
 }
 
 .create-lottery h2 {
   margin-bottom: 24px;
   color: var(--text-color);
+  text-align: center;  /* 标题居中 */
+}
+
+.create-lottery .form-group {
+  margin-bottom: var(--spacing);
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* 表单组元素居中 */
 }
 
 .create-lottery .form-group label {
   display: block;
   margin-bottom: 8px;
   color: var(--text-color);
+  width: 100%;         /* 标签占满宽度 */
+  text-align: left;    /* 标签文字左对齐 */
+}
+
+.create-lottery .form-group input,
+.create-lottery .form-group textarea {
+  width: 100%;         /* 输入框占满宽度 */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
 }
 
 .create-lottery textarea {
@@ -24,7 +44,7 @@
 /* 添加按钮容器样式 */
 .button-container {
   display: flex;
-  justify-content: center;
+  justify-content: center;  /* 按钮水平居中 */
   margin-top: 20px;
 }
 
@@ -47,8 +67,12 @@
 }
 
 @media (max-width: 480px) {
+  .create-lottery {
+    padding: 16px;    /* 移动端减小内边距 */
+  }
+  
   .button-container .button {
-    width: 100%;
+    width: 100%;      /* 移动端按钮占满宽度 */
     min-width: unset;
   }
 } 
