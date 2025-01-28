@@ -5,47 +5,65 @@ export function generateRandomCoins(
   remainingCoins: number,    // 剩余的光年币总数
   remainingParticipants: number // 剩余的参与者数量
 ): number {
+  // 如果只剩最后一个人，给他所有剩余的币
   if (remainingParticipants === 1) {
     return remainingCoins;
   }
   
-  // 确保每个人至少获得1个光年币，且不超过剩余币数
+  // 确保每个人至少获得1个光年币
   const minCoins = 1;
-  const maxCoins = Math.floor(remainingCoins * 0.8); // 最多拿走80%的剩余币
-  const randomCoins = Math.floor(Math.random() * (maxCoins - minCoins + 1)) + minCoins;
+  // 计算每人平均可分配的币数
+  const averageCoins = Math.floor(remainingCoins / remainingParticipants);
+  // 最大可分配数为平均数的两倍
+  const maxCoins = Math.min(
+    averageCoins * 2,
+    remainingCoins - (remainingParticipants - 1)
+  );
   
-  return Math.min(randomCoins, remainingCoins - (remainingParticipants - 1)); // 确保留给其他人
+  return Math.floor(Math.random() * (maxCoins - minCoins + 1)) + minCoins;
 }
 
-// 分配剩余的洋葱币给未参与抽奖的人
+// 分配剩余的光年币
 export function distributeRemainingCoins(
   state: LotteryState
 ): LotteryResult[] {
   const { config, results } = state;
   
-  // 找出还未参与抽奖的人
+  // 找出还未手动参与抽奖的人
+  const participatedNames = new Set(
+    results.filter(r => r.isManual).map(r => r.participantName)
+  );
   const remainingParticipants = config.participants.filter(
-    name => !results.find(r => r.participantName === name)
+    name => !participatedNames.has(name)
   );
   
-  // 计算剩余的洋葱币数量
-  const remainingCoins = config.totalCoins - results.reduce((sum, r) => sum + r.coins, 0);
+  // 计算剩余的光年币数量
+  const usedCoins = results.reduce((sum, r) => sum + r.coins, 0);
+  const remainingCoins = config.totalCoins - usedCoins;
   
-  let currentRemainingCoins = remainingCoins;
-  const newResults: LotteryResult[] = [];
+  // 如果没有剩余币或剩余参与者，返回空数组
+  if (remainingCoins <= 0 || remainingParticipants.length === 0) {
+    return [];
+  }
 
-  // 为每个剩余参与者分配洋葱币
+  // 一次性分配所有剩余的币
+  const newResults: LotteryResult[] = [];
+  let currentRemainingCoins = remainingCoins;
+
+  // 为每个剩余参与者只分配一次
   remainingParticipants.forEach((name, index) => {
     const isLast = index === remainingParticipants.length - 1;
-    const coins = isLast 
-      ? currentRemainingCoins 
+    const coins = isLast
+      ? currentRemainingCoins  // 最后一个人获得所有剩余的币
       : generateRandomCoins(currentRemainingCoins, remainingParticipants.length - index);
-    
+
     currentRemainingCoins -= coins;
+
     newResults.push({
       participantName: name,
       coins,
-      drawTime: new Date()
+      drawTime: new Date(),
+      isManual: false
     });
   });
 

@@ -1,0 +1,54 @@
+.create-lottery {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-lottery h2 {
+  margin-bottom: 24px;
+  color: var(--text-color);
+}
+
+.create-lottery .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.create-lottery textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* 添加按钮容器样式 */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* 修改按钮样式，与结果页的新建抽奖按钮保持一致 */
+.button-container .button {
+  min-width: 200px;
+  padding: 12px 24px;
+  background-color: #40a9ff;
+  border-radius: var(--border-radius);  /* 使用统一的倒角变量 */
+  font-size: 18px;
+  font-weight: normal;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-container .button:hover {
+  background-color: #69c0ff;  /* 更浅的蓝色作为悬停颜色 */
+}
+
+@media (max-width: 480px) {
+  .button-container .button {
+    width: 100%;
+    min-width: unset;
+  }
+} 
