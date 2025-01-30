@@ -73,17 +73,21 @@ export const lotteryService = {
 
     // 获取未参与的用户
     const participatedUsers = new Set(activity.results.map(r => r.participantName));
-    // 过滤掉已经参与的用户，并确保每个用户只出现一次
-    const remainingUsers = Array.from(new Set(
-      activity.config.participants.filter(name => !participatedUsers.has(name))
-    ));
+    // 去重：确保每个用户只出现一次
+    const remainingUsers = Array.from(
+      new Set(
+        activity.config.participants.filter(
+          name => !participatedUsers.has(name)
+        )
+      )
+    );
 
     // 计算剩余光年币
     const distributedCoins = activity.results.reduce((sum, r) => sum + r.coins, 0);
     const remainingCoins = activity.config.totalCoins - distributedCoins;
 
-    // 如果没有剩余用户或已分配完所有光年币，直接返回
-    if (remainingUsers.length === 0 || remainingCoins <= 0) {
+    // 如果没有剩余用户，直接返回
+    if (remainingUsers.length === 0) {
       return;
     }
 
@@ -109,18 +113,19 @@ export const lotteryService = {
       };
     });
 
-    // 更新数据库前再次检查是否有重复
-    const finalResults = results.filter(result => {
-      return !activity.results.some(r => r.participantName === result.participantName);
-    });
-
-    if (finalResults.length === 0) {
-      return;
+    // 计算这一轮分配的总币数
+    const allocatedCoins = results.reduce((sum, r) => sum + r.coins, 0);
+    
+    // 如果分配的币数超过剩余币数，需要调整
+    if (allocatedCoins > remainingCoins) {
+      const diff = allocatedCoins - remainingCoins;
+      // 从最后一个用户的币数中减去超出的部分
+      results[results.length - 1].coins -= diff;
     }
 
     // 更新数据库
     await updateDoc(docRef, {
-      results: arrayUnion(...finalResults),
+      results: arrayUnion(...results),
       isCompleted: true,
       updatedAt: Timestamp.fromDate(new Date())
     });

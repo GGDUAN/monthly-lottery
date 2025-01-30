@@ -1,0 +1,52 @@
+.share-lottery {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: var(--border-radius);
+}
+
+.share-url {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.share-url input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  color: #666;
+}
+
+.copy-button,
+.share-button {
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.copy-button:hover,
+.share-button:hover {
+  background: #40a9ff;
+}
+
+.share-button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 480px) {
+  .share-url {
+    flex-direction: column;
+  }
+  
+  .copy-button {
+    width: 100%;
+  }
+} 

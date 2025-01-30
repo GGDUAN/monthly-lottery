@@ -69,7 +69,7 @@ export const LotteryProvider: React.FC<{ children: React.ReactNode }> = ({ child
       url.searchParams.delete('id');
       window.history.replaceState({}, '', url.toString());
       await message.success('已重置，可以创建新的抽奖');
-      window.location.href = '/';
+      window.location.href = '/monthly-lottery';
     } catch (err) {
       message.error('重置失败，请刷新页面重试');
       console.error('重置失败:', err);

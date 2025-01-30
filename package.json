@@ -1,7 +1,6 @@
 {
   "name": "lottery-system",
   "version": "1.0.0",
-  "homepage": "https://ggduan.github.io/monthly-lottery",
   "dependencies": {
     "firebase": "^11.2.0",
     "lodash": "^4.17.21",
@@ -26,11 +25,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "CI=false npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
