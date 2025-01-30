@@ -73,7 +73,6 @@ export const lotteryService = {
 
     // 获取未参与的用户
     const participatedUsers = new Set(activity.results.map(r => r.participantName));
-    // 过滤掉已经参与的用户，并确保每个用户只出现一次
     const remainingUsers = Array.from(new Set(
       activity.config.participants.filter(name => !participatedUsers.has(name))
     ));
